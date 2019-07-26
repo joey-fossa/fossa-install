@@ -6,16 +6,22 @@ cd /opt/
 
 #Prompt for SSL/TLS support
 read -p "Install SSL/TLS Certificates (y/n)? " tls_answer
-#Prompt for certs copied to server and cert
-read -p "Have you copied certificates to this server and do you know the path and file names (y/n)? " cert_answer
-case ${cert_answer:0:1} in
+  case ${tls_answer:0:1} in
     y|Y )
-      #Do Nothing
+      #Prompt for certs copied to server and cert
+      read -p "Have you copied certificates to this server and do you know the path and file names (y/n)? " cert_answer
+      case ${cert_answer:0:1} in
+          y|Y )
+            #Do Nothing
+          ;;
+          * )
+            exit 0;;
+      esac
     ;;
     * )
-      exit 0;;
+      #Nothing
+    ;;
 esac
-
 case ${tls_answer:0:1} in
     y|Y )
         read -ep "Enter directory path for TLS and SSL Certs (Example: /xxx/yyy/certs) " file_dir
