@@ -36,7 +36,7 @@ function setup_system {
 
   # Download and install docker
   # NOTE: Do not use Docker 1.9.1 because of: https://github.com/docker/docker/issues/18180
-  grep -Fq "deb https://apt.dockerproject.org/repo ubuntu-trusty main" < /etc/apt/sources.list.d/docker.list || ( touch /etc/apt/sources.list.d/docker.list ; echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" >> /etc/apt/sources.list.d/docker.list )
+  #grep -Fq "deb https://apt.dockerproject.org/repo ubuntu-trusty main" < /etc/apt/sources.list.d/docker.list || ( touch /etc/apt/sources.list.d/docker.list ; echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" >> /etc/apt/sources.list.d/docker.list )
   yum update
   #####yum purge lxc-docker
   #####yum install -y docker-engine curl tar default-jdk
