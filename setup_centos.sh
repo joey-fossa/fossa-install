@@ -33,7 +33,7 @@ function setup_system {
   yum update
   yum -y install apt-transport-https ca-certificates
   #######apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-
+  gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
   # Download and install docker
   # NOTE: Do not use Docker 1.9.1 because of: https://github.com/docker/docker/issues/18180
   #grep -Fq "deb https://apt.dockerproject.org/repo ubuntu-trusty main" < /etc/apt/sources.list.d/docker.list || ( touch /etc/apt/sources.list.d/docker.list ; echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" >> /etc/apt/sources.list.d/docker.list )
@@ -47,7 +47,7 @@ function setup_system {
   sudo usermod -aG docker admin
 
   # Edit docker config to use "devicemapper" over "aufs" due to issues with aufs on Ubuntu
-  grep -Fq "DOCKER_OPTS=\"--storage-driver=devicemapper --storage-opt dm.basesize=20G\"" < /etc/default/docker || ( touch /etc/default/docker ; echo "DOCKER_OPTS=\"--storage-driver=devicemapper --storage-opt dm.basesize=20G\"" >> /etc/default/docker )
+  #grep -Fq "DOCKER_OPTS=\"--storage-driver=devicemapper --storage-opt dm.basesize=20G\"" < /etc/default/docker || ( touch /etc/default/docker ; echo "DOCKER_OPTS=\"--storage-driver=devicemapper --storage-opt dm.basesize=20G\"" >> /etc/default/docker )
 
   # Configure forwarding
   #####ufw disable
