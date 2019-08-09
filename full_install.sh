@@ -68,7 +68,7 @@ if [ "$OS_CHECK" = "aptgetpm" ]; then
 
     ################################################################################################
     #Install PostgreSQL
-    sudo apt-get -y install postgresql postgresql-contrib
+    #sudo apt-get -y install postgresql postgresql-contrib
 fi
 if [ "$OS_CHECK" = "yumpm" ]; then
     sudo yum update -y
@@ -86,10 +86,10 @@ if [ "$OS_CHECK" = "yumpm" ]; then
 
     ################################################################################################
     #Install PostgreSQL
-    sudo yum install -y postgresql-server postgresql-contrib
-    sudo postgresql-setup initdb
-    sudo systemctl start postgresql
-    sudo systemctl enable postgresql
+    #sudo yum install -y postgresql-server postgresql-contrib
+    #sudo postgresql-setup initdb
+    #sudo systemctl start postgresql
+    #sudo systemctl enable postgresql
     ###############################################################################################
     ####download setup.sh for Centos support
     sudo mv /opt/fossa/setup.sh /opt/fossa/setup.sh.bak
@@ -258,7 +258,7 @@ case ${tls_answer:0:1} in
     ;;
 esac
 ################################################################################################
-sudo systemctl stop postgresql
+#sudo systemctl stop postgresql
 ################################################################################################
 #(cd /opt/fossa;sudo fossa start 1) > /dev/null 2>&1 & disown
 ################################################################################################
