@@ -234,13 +234,16 @@ case ${tls_answer:0:1} in
         CERT_DIR=$CERT_TXT$file_dir"\"}"
         sed  -i "s^$match^&\n$CERT_DIR^" /opt/fossa/boot.sh
 
+        #Insert $CERTDIR parameter in Fossa core container run command
+        SED_SRC_TXT="-p 80:80 -p 443:443"
+        sed -i "s/$SED_SRC_TXT/&"' -v $CERTDIR:\/fossa\/certs'"/" /opt/fossa/boot.sh
+
         #Insert $CERTDIR parameter in Fossa Pre-Flight container run command
         SED_VAL_TXT_PREFLIGHT=""' -v $CERTDIR:\/fossa\/certs'""
         sed  -i "s/npm run preflight/&$SED_VAL_TXT_PREFLIGHT/" /opt/fossa/boot.sh
 
-        #Insert $CERTDIR parameter in Fossa core container run command
-        SED_SRC_TXT="-p 80:80 -p 443:443"
-        sed -i "s/$SED_SRC_TXT/&"' -v $CERTDIR:\/fossa\/certs'"/" /opt/fossa/boot.sh
+        SED_EXTRACT_TXT=""' -v $CERTDIR:/fossa/certs -e NODE_EXTRA_CA_CERTS='/fossa/certs/mycert.crt''""
+        sed -i "s^npm run start:agent^&$SED_EXTRACT_TXT^" /opt/fossa/boot.sh
 
         #Change SSL port to 8443
         #sed -i 's/443:443/8443:8443/g' /opt/fossa/boot.sh
