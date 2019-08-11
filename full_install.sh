@@ -50,9 +50,11 @@ case ${ec2_answer:0:1} in
     y|Y )
         export PRIMARY_IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
         #export PRIMARY_IP=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
+        export FQN=$(curl http://169.254.169.254/latest/meta-data/public-hostname)
     ;;
     * )
         export PRIMARY_IP=$(ip route get 1 | awk '{print $NF;exit}')
+        export FQN=$(nslookup $(hostname -i)) ; fqn=${fqn##*name = } ; fqn=${fqn%.*} ; echo $fqn
     ;;
 esac
 #Update packages
@@ -186,8 +188,8 @@ sudo cp /opt/fossa/config.env /opt/fossa/config.env.bak
 case ${ec2_answer:0:1} in
     y|Y )
         #Update db_host with EC2 IP if EC2
-      sudo -E sed -i "s/db__host=db/db__host=$PRIMARY_IP/g" /opt/fossa/config.env
-      sudo -E sed -i "s/app__hostname=localhost/app__hostname=$PRIMARY_IP/g" /opt/fossa/config.env
+      sudo -E sed -i "s/db__host=db/db__host=$FQN/g" /opt/fossa/config.env
+      sudo -E sed -i "s/app__hostname=localhost/app__hostname=$FQN/g" /opt/fossa/config.env
     ;;
     * )
         #N/A
@@ -212,13 +214,13 @@ sudo echo "componentUploader__bucket=archive.fossa.io"  >> /opt/fossa/config.env
 case ${tls_answer:0:1} in
     y|Y )
         #If SSL in play set minio endpoint ports to 8443
-        sudo echo -E "cache__package__s3Options__endpoint=https://"$PRIMARY_IP":8443"  >> /opt/fossa/config.env
-        sudo echo -E "s3__endpoint=https://"$PRIMARY_IP":8443"  >> /opt/fossa/config.env
+        sudo echo -E "cache__package__s3Options__endpoint=https://"$FQN":8443"  >> /opt/fossa/config.env
+        sudo echo -E "s3__endpoint=https://"$FQN":8443"  >> /opt/fossa/config.env
     ;;
     * )
         #If no SSL set minio endpoint to standard 9000
-        sudo echo -E "cache__package__s3Options__endpoint=http://"$PRIMARY_IP":9000"  >> /opt/fossa/config.env
-        sudo echo -E "s3__endpoint=http://"$PRIMARY_IP":9000"  >> /opt/fossa/config.env
+        sudo echo -E "cache__package__s3Options__endpoint=http://"$FQN":9000"  >> /opt/fossa/config.env
+        sudo echo -E "s3__endpoint=http://"$FQN":9000"  >> /opt/fossa/config.env
     ;;
 esac
 ################################################################################################
